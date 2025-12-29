@@ -110,9 +110,10 @@ export interface PagedResult<T> {
 export interface JobSearchParams {
   query?: string;
   location?: string;
+  locations?: string[];
   jobType?: string;
-  minSalary?: number;
-  maxSalary?: number;
+  jobTypes?: string[];
+  experienceLevels?: string[];
   categoryId?: number;
   companyId?: number;
   page?: number;
@@ -161,12 +162,21 @@ export const jobsApi = {
     if (params.query) searchParams.append('query', params.query);
     if (params.location) searchParams.append('location', params.location);
     if (params.jobType) searchParams.append('jobType', params.jobType);
-    if (params.minSalary) searchParams.append('minSalary', params.minSalary.toString());
-    if (params.maxSalary) searchParams.append('maxSalary', params.maxSalary.toString());
     if (params.categoryId) searchParams.append('categoryId', params.categoryId.toString());
     if (params.companyId) searchParams.append('companyId', params.companyId.toString());
     if (params.page) searchParams.append('page', params.page.toString());
     if (params.pageSize) searchParams.append('pageSize', params.pageSize.toString());
+    
+    // Handle array parameters
+    if (params.jobTypes && params.jobTypes.length > 0) {
+      params.jobTypes.forEach(type => searchParams.append('jobTypes', type));
+    }
+    if (params.experienceLevels && params.experienceLevels.length > 0) {
+      params.experienceLevels.forEach(level => searchParams.append('experienceLevels', level));
+    }
+    if (params.locations && params.locations.length > 0) {
+      params.locations.forEach(loc => searchParams.append('locations', loc));
+    }
     
     return fetchApi<PagedResult<Job>>(`/jobs?${searchParams.toString()}`);
   },

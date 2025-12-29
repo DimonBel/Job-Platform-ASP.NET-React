@@ -9,11 +9,12 @@ public interface IJobRepository : IRepository<Job>
     Task<(IReadOnlyList<Job> Jobs, int TotalCount)> SearchJobsAsync(
         string? query = null,
         string? location = null,
+        string[]? locations = null,
         string? jobType = null,
+        string[]? jobTypes = null,
+        string[]? experienceLevels = null,
         int? categoryId = null,
         int? companyId = null,
-        decimal? minSalary = null,
-        decimal? maxSalary = null,
         int page = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default);

@@ -40,11 +40,12 @@ public class JobRepository : Repository<Job>, IJobRepository
     public async Task<(IReadOnlyList<Job> Jobs, int TotalCount)> SearchJobsAsync(
         string? query = null,
         string? location = null,
+        string[]? locations = null,
         string? jobType = null,
+        string[]? jobTypes = null,
+        string[]? experienceLevels = null,
         int? categoryId = null,
         int? companyId = null,
-        decimal? minSalary = null,
-        decimal? maxSalary = null,
         int page = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default)
@@ -66,15 +67,33 @@ public class JobRepository : Repository<Job>, IJobRepository
                 j.JobTags.Any(jt => jt.Tag.Name.ToLower().Contains(query)));
         }
 
-        if (!string.IsNullOrWhiteSpace(location))
+        // Filter by location - combine single location and multiple locations with OR logic
+        var hasLocationFilter = !string.IsNullOrWhiteSpace(location);
+        var hasLocationsFilter = locations != null && locations.Length > 0;
+
+        if (hasLocationFilter || hasLocationsFilter)
         {
-            location = location.ToLower();
-            queryable = queryable.Where(j => j.Location.ToLower().Contains(location));
+            queryable = queryable.Where(j =>
+                (hasLocationFilter && j.Location.ToLower().Contains(location!.ToLower())) ||
+                (hasLocationsFilter && locations!.Any(loc => j.Location.ToLower().Contains(loc.ToLower())))
+            );
         }
 
         if (!string.IsNullOrWhiteSpace(jobType))
         {
             queryable = queryable.Where(j => j.JobType == jobType);
+        }
+
+        // Filter by multiple job types
+        if (jobTypes != null && jobTypes.Length > 0)
+        {
+            queryable = queryable.Where(j => jobTypes.Contains(j.JobType));
+        }
+
+        // Filter by multiple experience levels
+        if (experienceLevels != null && experienceLevels.Length > 0)
+        {
+            queryable = queryable.Where(j => experienceLevels.Contains(j.ExperienceLevel));
         }
 
         if (categoryId.HasValue)

@@ -7,7 +7,6 @@ import JobCard from "@/components/JobCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useJobSearch } from "@/services/hooks";
 import type { JobSearchParams } from "@/services/api";
@@ -18,7 +17,6 @@ import {
   MapPin,
   Briefcase,
   Clock,
-  DollarSign,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -33,7 +31,6 @@ const Jobs = () => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
-  const [salaryRange, setSalaryRange] = useState([50000, 250000]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
@@ -46,9 +43,9 @@ const Jobs = () => {
     pageSize,
     query: query || undefined,
     location: locationQuery || undefined,
-    jobType: selectedTypes.length > 0 ? selectedTypes[0] : undefined,
-    minSalary: salaryRange[0] !== 50000 ? salaryRange[0] : undefined,
-    maxSalary: salaryRange[1] !== 250000 ? salaryRange[1] : undefined,
+    jobTypes: selectedTypes.length > 0 ? selectedTypes : undefined,
+    experienceLevels: selectedExperience.length > 0 ? selectedExperience : undefined,
+    locations: selectedLocations.length > 0 ? selectedLocations : undefined,
   };
 
   const { data: jobsData, isLoading, error } = useJobSearch(searchApiParams);
@@ -56,7 +53,7 @@ const Jobs = () => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [query, locationQuery, selectedTypes, salaryRange]);
+  }, [query, locationQuery, selectedTypes, selectedExperience, selectedLocations]);
 
   const toggleFilter = (value: string, selected: string[], setSelected: (val: string[]) => void) => {
     if (selected.includes(value)) {
@@ -70,7 +67,6 @@ const Jobs = () => {
     setSelectedTypes([]);
     setSelectedExperience([]);
     setSelectedLocations([]);
-    setSalaryRange([50000, 250000]);
   };
 
   const activeFiltersCount = selectedTypes.length + selectedExperience.length + selectedLocations.length;
@@ -167,8 +163,8 @@ const Jobs = () => {
                     </div>
                   </div>
 
-                  {/* Salary Range Filter */}
-                  <div className="bg-card rounded-xl border border-border/50 p-5">
+                  {/* Salary Range Filter - Disabled (Salary is a string field) */}
+                  {/* <div className="bg-card rounded-xl border border-border/50 p-5">
                     <h3 className="font-medium text-foreground mb-4 flex items-center gap-2">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
                       Salary Range
@@ -187,7 +183,7 @@ const Jobs = () => {
                         <span>${(salaryRange[1] / 1000).toFixed(0)}k</span>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Location Filter */}
                   <div className="bg-card rounded-xl border border-border/50 p-5">
@@ -256,6 +252,17 @@ const Jobs = () => {
                         onClick={() => toggleFilter(exp, selectedExperience, setSelectedExperience)}
                       >
                         {exp}
+                        <X className="h-3 w-3 ml-1" />
+                      </Badge>
+                    ))}
+                    {selectedLocations.map((loc) => (
+                      <Badge
+                        key={loc}
+                        variant="secondary"
+                        className="cursor-pointer hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => toggleFilter(loc, selectedLocations, setSelectedLocations)}
+                      >
+                        {loc}
                         <X className="h-3 w-3 ml-1" />
                       </Badge>
                     ))}

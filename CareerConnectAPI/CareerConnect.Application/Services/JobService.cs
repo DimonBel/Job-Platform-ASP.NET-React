@@ -28,11 +28,12 @@ public class JobService : IJobService
         var (jobs, totalCount) = await _unitOfWork.Jobs.SearchJobsAsync(
             searchParams.Query,
             searchParams.Location,
+            searchParams.Locations,
             searchParams.JobType,
+            searchParams.JobTypes,
+            searchParams.ExperienceLevels,
             searchParams.CategoryId,
             searchParams.CompanyId,
-            searchParams.MinSalary,
-            searchParams.MaxSalary,
             searchParams.Page,
             searchParams.PageSize,
             cancellationToken);
@@ -151,7 +152,7 @@ public class JobService : IJobService
     private static JobDto MapToDto(Job job)
     {
         var timeAgo = GetTimeAgo(job.PostedDate);
-        
+
         return new JobDto
         {
             Id = job.Id,
@@ -171,7 +172,7 @@ public class JobService : IJobService
     private static JobDetailDto MapToDetailDto(Job job)
     {
         var timeAgo = GetTimeAgo(job.PostedDate);
-        
+
         return new JobDetailDto
         {
             Id = job.Id,
@@ -202,7 +203,7 @@ public class JobService : IJobService
     private static string GetTimeAgo(DateTime date)
     {
         var timeSpan = DateTime.UtcNow - date;
-        
+
         if (timeSpan.TotalDays >= 30)
             return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) > 1 ? "s" : "")} ago";
         if (timeSpan.TotalDays >= 7)
