@@ -4,49 +4,37 @@ ASP.NET Core Web API backend for the Career Connect job platform.
 
 ## Tech Stack
 
-- **Framework**: ASP.NET Core 8.0
+- **Framework**: ASP.NET Core 9.0
+- **Architecture**: Clean Architecture
 - **Database**: PostgreSQL
-- **ORM**: Entity Framework Core 8.0
+- **ORM**: Entity Framework Core 9.0
 - **API Documentation**: Swagger/OpenAPI
 
-## Project Structure
+## Project Structure (Clean Architecture)
 
 ```
 CareerConnectAPI/
-├── Controllers/         # API endpoints
-│   ├── JobsController.cs
-│   ├── CompaniesController.cs
-│   ├── CategoriesController.cs
-│   ├── ApplicationsController.cs
-│   ├── UsersController.cs
-│   ├── TagsController.cs
-│   └── StatisticsController.cs
-├── Data/
-│   ├── ApplicationDbContext.cs   # EF Core DbContext
-│   └── DbSeeder.cs               # Database seeding
-├── Models/
-│   ├── Entities/                 # Database entities
-│   │   ├── Job.cs
-│   │   ├── Company.cs
-│   │   ├── Category.cs
-│   │   ├── Tag.cs
-│   │   ├── User.cs
-│   │   ├── Application.cs
-│   │   └── ...
-│   └── DTOs/                     # Data Transfer Objects
-│       ├── JobDto.cs
-│       ├── CompanyDto.cs
-│       ├── CategoryDto.cs
-│       └── ...
-├── Repositories/                 # Data access layer
-│   ├── JobRepository.cs
-│   ├── CompanyRepository.cs
-│   └── ...
-├── Services/                     # Business logic layer
-│   ├── JobService.cs
-│   ├── CompanyService.cs
-│   └── ...
-└── Program.cs                    # Application entry point
+├── CareerConnect.API/              # Presentation Layer
+│   ├── Controllers/                # API endpoints
+│   ├── Middleware/                 # Custom middleware
+│   └── Program.cs                  # Application entry point
+│
+├── CareerConnect.Application/      # Application Layer
+│   ├── DTOs/                       # Data Transfer Objects
+│   ├── Interfaces/                 # Service interfaces
+│   ├── Services/                   # Business logic
+│   └── Mappings/                   # AutoMapper profiles
+│
+├── CareerConnect.Domain/           # Domain Layer
+│   ├── Entities/                   # Domain entities
+│   ├── Interfaces/                 # Repository interfaces
+│   └── Common/                     # Base classes
+│
+└── CareerConnect.Infrastructure/   # Infrastructure Layer
+    ├── Data/                       # DbContext
+    ├── Repositories/               # Repository implementations
+    ├── Migrations/                 # EF Core migrations
+    └── DbSeeder.cs                 # Database seeding
 ```
 
 ## Prerequisites

@@ -71,21 +71,19 @@
 
 ```
 Career-Connect/
-├── 📂 CareerConnectAPI/          # Backend API
-│   └── src/
-│       ├── CareerConnect.API/           # API Layer (Controllers, Middleware)
-│       ├── CareerConnect.Application/   # Business Logic (Services, DTOs)
-│       ├── CareerConnect.Domain/        # Domain Entities & Interfaces
-│       └── CareerConnect.Infrastructure/# Data Access (EF Core, Repositories)
+├── 📂 CareerConnectAPI/                    # Backend API
+│   ├── CareerConnect.API/                  # API Layer (Controllers, Middleware)
+│   ├── CareerConnect.Application/          # Business Logic (Services, DTOs)
+│   ├── CareerConnect.Domain/               # Domain Entities & Interfaces
+│   └── CareerConnect.Infrastructure/       # Data Access (EF Core, Repositories)
 │
-└── 📂 Frontend/                  # React Application
-    └── src/
-        ├── components/          # Reusable UI Components
-        ├── pages/               # Page Components
-        ├── services/            # API Integration
-        ├── contexts/            # React Context Providers
-        ├── hooks/               # Custom React Hooks
-        └── lib/                 # Utility Functions
+└── 📂 Frontend/                            # React Application
+    ├── components/                         # Reusable UI Components
+    ├── pages/                              # Page Components
+    ├── services/                           # API Integration
+    ├── contexts/                           # React Context Providers
+    ├── hooks/                              # Custom React Hooks
+    └── lib/                                # Utility Functions
 ```
 
 ## 🚀 Getting Started
@@ -106,7 +104,7 @@ Career-Connect/
 
 2. **Configure the database**
    
-   Create a PostgreSQL database and update `CareerConnectAPI/src/CareerConnect.API/appsettings.json`:
+   Create a PostgreSQL database and update `CareerConnectAPI/CareerConnect.API/appsettings.json`:
    ```json
    {
      "ConnectionStrings": {
@@ -117,7 +115,7 @@ Career-Connect/
 
 3. **Run migrations and start the API**
    ```bash
-   cd CareerConnectAPI/src/CareerConnect.API
+   cd CareerConnectAPI/CareerConnect.API
    dotnet ef database update
    dotnet run
    ```
